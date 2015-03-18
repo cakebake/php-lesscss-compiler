@@ -183,7 +183,3 @@ class LessConverter
         return ($this->useCache === true) ? ($this->cacheDir !== null && is_dir($this->cacheDir)) ? $this->cacheDir : __DIR__ . DIRECTORY_SEPARATOR . '/../tmp/cache' : false;
     }
 }
-
-//PREVENT PhpED DEBUGGING ERRORS ;)
-if(!function_exists('DebugBreak')){function DebugBreak(){}}
-if(!function_exists('debugbreak')){function debugbreak(){}}

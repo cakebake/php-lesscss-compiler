@@ -48,6 +48,11 @@ class LessConverter
     * @var null|string Bypass some less to parse multiple
     */
     public $parseString = null;
+    
+    /**
+     * @var bool The sourcemap will be appended to the generated css file
+     */
+    public $sourceMap = true;
 
     /**
     * @var bool Force parsing 
@@ -168,6 +173,7 @@ class LessConverter
             $this->_parser = new \Less_Parser(array(
                 'compress' => ($this->compress === true) ? true : false,
                 'cache_dir' => $this->getCacheSetting(),
+                'sourceMap' => ($this->sourceMap === true) ? true : false,
             ));
         }
 

@@ -2,6 +2,8 @@
 
 namespace cakebake\lesscss;
 
+use Exception;
+
 /**
 * LessConverter supports conversion of less script format into CSS script.
 * 
@@ -60,7 +62,7 @@ class LessConverter
     public $forceUpdate = false;
 
     /**
-    * @var obj Less_Parser Cache obj
+    * @var LessConverter Less_Parser Cache obj
     */
     private $_parser = null;
 
@@ -70,11 +72,14 @@ class LessConverter
     private $_mustRegenerate = false;
 
     /**
-    * Makes the convertion job
-    * 
-    * @param array $args array('input', 'webFolder')
-    * @param string $output The output css file
-    */
+     * Makes the job
+     *
+     * @param array  $args   array('input', 'webFolder')
+     * @param string $output The output css file
+     * @param bool   $return
+     * @return bool
+     * @throws Exception
+     */
     public function init($args, $output, $return = false)
     {
         if (!is_array($args)) {
@@ -110,11 +115,12 @@ class LessConverter
     }
 
     /**
-    * Checks all files, if the convertion must be refreshed
-    * 
-    * @param array $args array('input', 'webFolder')
-    * @param string $output The output css file
-    */
+     * Checks all files, if the convertion must be refreshed
+     *
+     * @param array  $args   array('input', 'webFolder')
+     * @param string $output The output css file
+     * @return bool
+     */
     public function mustRegenerate($args, $output)
     {
         if ($this->forceUpdate === true)
@@ -155,14 +161,14 @@ class LessConverter
     }
 
     /**
-    * Parsing Less File
-    *
-    * @param string $input the asset file path, absolute
-    * @param string $webFolder The url root to prepend to any relative image or @import urls in the .less file.
-    * @return mixed string with css on success, false on failure. 
-    * @throws Less_Exception_Parser when the command fails
-    * @see https://github.com/oyejorge/less.php
-    */
+     * Parsing Less File
+     *
+     * @param string $input     the asset file path, absolute
+     * @param string $webFolder The url root to prepend to any relative image or @import urls in the .less file.
+     * @return mixed string with css on success, false on failure.
+     * @throws Exception
+     * @see https://github.com/oyejorge/less.php
+     */
     protected function parseLess($input, $webFolder)
     {
         if (!class_exists('Less_Parser')) {

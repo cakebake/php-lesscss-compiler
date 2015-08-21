@@ -5,6 +5,7 @@ class CompileTest extends cakebake\lesscss\TestCase
     public function testGenerateCssFileWithCache()
     {
         $less = new \cakebake\lesscss\LessConverter();
+        $outputFile = $this->tmpDir . DIRECTORY_SEPARATOR . str_replace(array('::', ':'), '_', __METHOD__) . '.css';
         $less->init([
             [
                 'input' => __DIR__ . '/example-1.less',
@@ -14,6 +15,8 @@ class CompileTest extends cakebake\lesscss\TestCase
                 'input' => __DIR__ . '/example-2.less',
                 'webFolder' => '../tests',
             ],
-        ], $this->tmpDir . DIRECTORY_SEPARATOR . str_replace(array('::', ':'), '_', __METHOD__) . '.css');
+        ], $outputFile);
+
+        $this->assertFileExists($outputFile);
     }
 }

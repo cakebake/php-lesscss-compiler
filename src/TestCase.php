@@ -4,6 +4,8 @@ namespace cakebake\lesscss;
 
 class TestCase extends \PHPUnit_Framework_TestCase
 {
+    public $tmpDir = null;
+
     protected function setUp()
     {
         $this->tmpDir = realpath(__DIR__ . '/../tmp');

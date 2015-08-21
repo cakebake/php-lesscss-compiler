@@ -62,6 +62,16 @@ class LessConverter
     public $forceUpdate = false;
 
     /**
+     * @var string ini setting; disabled when empty
+     */
+    public $memoryLimit = '256M';
+
+    /**
+     * @var int ini setting; disabled when empty
+     */
+    public $maxExecutionTime = 300;
+
+    /**
     * @var LessConverter Less_Parser Cache obj
     */
     private $_parser = null;
@@ -72,7 +82,7 @@ class LessConverter
     private $_mustRegenerate = false;
 
     /**
-     * Makes the job
+     * Makes the convertion job
      *
      * @param array  $args   array('input', 'webFolder')
      * @param string $output The output css file
@@ -93,6 +103,9 @@ class LessConverter
 
             return false;
         }
+
+        $this->setMaxExecutionTime();
+        $this->setMemoryLimit();
 
         foreach ($args as $config) {
             extract($config);
@@ -193,5 +206,57 @@ class LessConverter
     protected function getCacheSetting()
     {
         return ($this->useCache === true) ? ($this->cacheDir !== null && is_dir($this->cacheDir)) ? $this->cacheDir : __DIR__ . DIRECTORY_SEPARATOR . '/../tmp/cache' : false;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMemoryLimitSetting()
+    {
+        return (!empty($this->memoryLimit) && is_string($this->memoryLimit)) ? $this->memoryLimit : null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function setMemoryLimit()
+    {
+        if (($memoryLimit = $this->getMemoryLimitSetting()) == null)
+            return false;
+
+        if (self::isSafeModeEnabled() || !function_exists('ini_set'))
+            return false;
+
+        return (@ini_set('memory_limit', $memoryLimit) === false) ? false : true;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxExecutionTimeSetting()
+    {
+        return (!empty($this->maxExecutionTime) && (int)$this->maxExecutionTime != 0) ? (int)$this->maxExecutionTime : null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function setMaxExecutionTime()
+    {
+        if (($maxExecutionTime = $this->getMaxExecutionTimeSetting()) == null)
+            return false;
+
+        if (self::isSafeModeEnabled() || !function_exists('ini_set'))
+            return false;
+
+        return (@ini_set('max_execution_time', $maxExecutionTime) === false) ? false : true;
+    }
+
+    /**
+     * @return bool
+     */
+    public static function isSafeModeEnabled()
+    {
+        return (@ini_get('safe_mode') === true) ? true : false;
     }
 }

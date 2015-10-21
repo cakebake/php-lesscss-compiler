@@ -54,7 +54,7 @@ class LessConverter
     /**
      * @var bool The sourcemap will be appended to the generated css file
      */
-    public $sourceMap = true;
+    public $sourceMap = false;
 
     /**
     * @var bool Force parsing 
